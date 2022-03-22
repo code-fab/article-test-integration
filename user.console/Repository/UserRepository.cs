@@ -16,7 +16,7 @@ namespace user.console.Repository
 
         public UserRepository(IOptions<MongoSetting> setting)
         {
-            var client = new MongoClient(setting.Value.ToMongoClientSettings());
+            var client = new MongoClient(new MongoClientSettings { Server = new MongoServerAddress(setting.Value.Host, setting.Value.Port) });
             var database = client.GetDatabase(setting.Value.DatabaseName);
             collection = database.GetCollection<User>("user");
         }
@@ -29,11 +29,6 @@ namespace user.console.Repository
         public async Task<User> GetAsync(Guid guid)
         {
             return (await collection.FindAsync(Builders<User>.Filter.Eq(x => x.Guid, guid))).FirstOrDefault();
-        }
-
-        public async Task DeleteAsync(Guid guid)
-        {
-            await collection.DeleteOneAsync(Builders<User>.Filter.Eq(x => x.Guid, guid));
         }
     }
 }
