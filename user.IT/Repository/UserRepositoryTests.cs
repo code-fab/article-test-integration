@@ -19,7 +19,7 @@ namespace user.IT.Repository
             userRepository = new UserRepository(Options.Create(new MongoSetting { Host = "localhost", Port = 27017, DatabaseName = "user" }));
         }
 
-        [Fact]
+        [FactIT]
         public async Task Should_InsertAsync()
         {
             var userGuid = Guid.NewGuid();
